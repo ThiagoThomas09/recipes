@@ -125,4 +125,10 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
+    public function actionTestCategories()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return \app\models\Category::getDropdownList();
+    }
 }

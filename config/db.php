@@ -1,14 +1,12 @@
 <?php
 
-return [
-    'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=yii2basic',
-    'username' => 'root',
-    'password' => '',
-    'charset' => 'utf8',
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
 
-    // Schema cache options (for production environment)
-    //'enableSchemaCache' => true,
-    //'schemaCacheDuration' => 60,
-    //'schemaCache' => 'cache',
+return [
+    'class'    => 'yii\db\Connection',
+    'dsn'      => $_ENV['DB_DSN'],
+    'username' => $_ENV['DB_USER'],
+    'password' => $_ENV['DB_PASS'],
+    'charset'  => 'utf8mb4',
 ];
