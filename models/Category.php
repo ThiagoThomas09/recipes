@@ -31,16 +31,16 @@ class Category extends ActiveRecord
     }
 
     public function behaviors()
-{
-    return [
-        [
-            'class' => TimestampBehavior::class,
-            'value' => new Expression('NOW()'),
-            'attributes' => [
-                ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
-                ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'value' => new Expression('NOW()'),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
             ],
-        ],
-    ];
-}
+        ];
+    }
 }
