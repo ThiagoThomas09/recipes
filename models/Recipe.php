@@ -2,9 +2,10 @@
 
 namespace app\models;
 
-use yii\behaviors\TimestampBehavior;
-use yii\db\Expression;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
+use yii\behaviors\SluggableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\web\UploadedFile;
 
 use Yii;
@@ -47,7 +48,7 @@ class Recipe extends \yii\db\ActiveRecord
         return [
             [['user_id', 'cook_time', 'image'], 'default', 'value' => null],
             [['user_id', 'cook_time'], 'integer'],
-            [['title', 'slug', 'description'], 'required'],
+            [['title', 'description'], 'required'],
             [['description'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['title', 'slug', 'image'], 'string', 'max' => 255],
@@ -83,6 +84,13 @@ class Recipe extends \yii\db\ActiveRecord
                     ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
                     ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
                 ],
+            ],
+            [
+                'class'         => SluggableBehavior::class,
+                'attribute'     => 'title',
+                'slugAttribute' => 'slug',
+                'ensureUnique'  => true,
+                'immutable'     => true,
             ],
         ];
     }
