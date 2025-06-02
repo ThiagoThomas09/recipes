@@ -8,6 +8,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use Yii;
+
 /**
  * RecipeController implements the CRUD actions for Recipe model.
  */
@@ -69,8 +71,10 @@ class RecipeController extends Controller
     {
         $model = new Recipe();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->user_id = Yii::$app->user->id;
+
+            if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -93,6 +97,10 @@ class RecipeController extends Controller
     {
         $model = $this->findModel($id);
 
+        if ($model->user_id !== Yii::$app->user->id) {
+            throw new NotFoundHttpException('Você não tem permissão para atualizar esta receita.');
+        }
+
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -111,8 +119,13 @@ class RecipeController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
 
+        if ($model->user_id !== Yii::$app->user->id) {
+            throw new NotFoundHttpException('Você não tem permissão para deletar esta receita.');
+        }
+
+        $model->delete();
         return $this->redirect(['index']);
     }
 
