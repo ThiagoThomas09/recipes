@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\helpers\ArrayHelper;
 
 /** @var yii\web\View $this */
 /** @var app\models\RecipeSearch $searchModel */
@@ -29,11 +30,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'user_id',
             'title',
-            'slug',
             'description:ntext',
+            [
+                'label' => 'Categorie',
+                'value' => function($model) {
+                    // ArrayHelper::getColumn extrai o atributo 'name' de cada Categoria
+                    $names = ArrayHelper::getColumn($model->categories, 'name');
+                    return implode(', ', $names);
+                },
+                'format' => 'raw',
+            ],
             //'cook_time:datetime',
             //'image',
             //'created_at',

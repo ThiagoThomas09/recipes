@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\models\Category;
 
 /** @var yii\web\View $this */
 /** @var app\models\Recipe $model */
@@ -24,6 +25,8 @@ use yii\widgets\ActiveForm;
     ->label('Tempo de preparo (minutos)')
     ?>
 
+    <?= $form->field($model, 'categoryIds')
+        ->listBox(Category::getDropdownList(), ['multiple' => true, 'size' => 6]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

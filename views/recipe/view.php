@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\helpers\ArrayHelper;
 
 /** @var yii\web\View $this */
 /** @var app\models\Recipe $model */
@@ -35,6 +36,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'slug',
             'description:ntext',
             'cook_time',
+            [
+                'label' => 'Category',
+                'value' => implode(', ', ArrayHelper::getColumn($model->categories, 'name')),
+            ],
             'image',
             'created_at',
             'updated_at',

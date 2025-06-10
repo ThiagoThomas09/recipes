@@ -41,6 +41,12 @@ class Recipe extends \yii\db\ActiveRecord
     public $imageFile = null;
 
     /**
+     * Holds IDs of categories assigned to the recipe.
+     * @var array
+     */
+    public $categoryIds = [];
+
+    /**
      * {@inheritdoc}
      */
     public function rules()
@@ -53,6 +59,8 @@ class Recipe extends \yii\db\ActiveRecord
             [['created_at', 'updated_at'], 'safe'],
             [['title', 'slug', 'image'], 'string', 'max' => 255],
             [['slug'], 'unique'],
+
+            [['categoryIds'], 'safe'],
         ];
     }
 
@@ -71,6 +79,7 @@ class Recipe extends \yii\db\ActiveRecord
             'image' => 'Image',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'categoryIds' => 'Categories',
         ];
     }
 
@@ -104,5 +113,24 @@ class Recipe extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        Yii::$app->db->createCommand()
+            ->delete('recipe_category', ['recipe_id' => $this->id])
+            ->execute();
+
+        if (is_array($this->categoryIds)) {
+            foreach ($this->categoryIds as $catId) {
+                Yii::$app->db->createCommand()
+                    ->insert('recipe_category', [
+                        'recipe_id'   => $this->id,
+                        'category_id' => $catId,
+                    ])->execute();
+            }
+        }
     }
 }
