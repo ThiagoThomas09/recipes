@@ -9,6 +9,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\Recipe;
 use app\models\Register;
 
 class SiteController extends Controller
@@ -54,12 +55,11 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        // Evita redirecionamento em loop
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['site/login']);
-        }
+        $recipes = Recipe::find()->orderBy(['created_at'=>SORT_DESC])->all();
 
-        return $this->render('index'); // futuramente pode ser receitas/index
+        return $this->render('index', [
+            'recipes' => $recipes,
+        ]);
     }
 
     /**
