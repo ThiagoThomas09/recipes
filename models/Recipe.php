@@ -7,6 +7,7 @@ use yii\db\Expression;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\web\UploadedFile;
+use yii\helpers\FileHelper;
 
 use Yii;
 
@@ -77,6 +78,7 @@ class Recipe extends \yii\db\ActiveRecord
             'description' => 'Description',
             'cook_time' => 'Cook Time',
             'image' => 'Image',
+            'imageFile' => 'Image',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'categoryIds' => 'Categories',
@@ -113,6 +115,26 @@ class Recipe extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+
+        if ($this->imageFile instanceof UploadedFile) {
+            $filename = uniqid('recipe_') . '.' . $this->imageFile->extension;
+            $uploadDir = Yii::getAlias('@webroot/uploads');
+            FileHelper::createDirectory($uploadDir);
+            $path = $uploadDir . DIRECTORY_SEPARATOR . $filename;
+            if ($this->imageFile->saveAs($path)) {
+                $this->image = 'uploads/' . $filename;
+            }
+        }
+
+        return true;
     }
 
     public function afterSave($insert, $changedAttributes)

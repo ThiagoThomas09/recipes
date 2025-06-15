@@ -7,6 +7,7 @@ use app\models\RecipeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 use Yii;
 
@@ -73,6 +74,7 @@ class RecipeController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->user_id = Yii::$app->user->id;
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
 
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -101,8 +103,11 @@ class RecipeController extends Controller
             throw new NotFoundHttpException('Você não tem permissão para atualizar esta receita.');
         }
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('update', [

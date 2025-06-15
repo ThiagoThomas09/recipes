@@ -40,7 +40,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Category',
                 'value' => implode(', ', ArrayHelper::getColumn($model->categories, 'name')),
             ],
-            'image',
+            [
+                'attribute' => 'image',
+                'format' => 'html',
+                'value' => $model->image ? Html::img('/' . $model->image, ['style' => 'max-width:300px;']) : null,
+            ],
             'created_at',
             'updated_at',
         ],

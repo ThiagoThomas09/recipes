@@ -28,6 +28,8 @@ use app\models\Category;
     <?= $form->field($model, 'categoryIds')
         ->listBox(Category::getDropdownList(), ['multiple' => true, 'size' => 6]) ?>
 
+    <?= $form->field($model, 'imageFile')->fileInput() ?>
+
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
