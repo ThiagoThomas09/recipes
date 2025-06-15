@@ -30,6 +30,13 @@ use app\models\Category;
 
     <?= $form->field($model, 'imageFile')->fileInput() ?>
 
+    <?php if (!$model->isNewRecord && $model->image): ?>
+        <div class="mb-2">
+            <?= Html::img('@web/' . $model->image, ['style' => 'max-width:200px;']) ?>
+        </div>
+        <?= $form->field($model, 'removeImage')->checkbox() ?>
+    <?php endif; ?>
+
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

@@ -41,6 +41,8 @@ class Recipe extends \yii\db\ActiveRecord
      */
     public $imageFile = null;
 
+    public $removeImage = false;
+
     /**
      * Holds IDs of categories assigned to the recipe.
      * @var array
@@ -62,6 +64,7 @@ class Recipe extends \yii\db\ActiveRecord
             [['slug'], 'unique'],
 
             [['categoryIds'], 'safe'],
+            [['removeImage'], 'boolean'],
         ];
     }
 
@@ -79,6 +82,7 @@ class Recipe extends \yii\db\ActiveRecord
             'cook_time' => 'Cook Time',
             'image' => 'Image',
             'imageFile' => 'Image',
+            'removeImage' => 'Remove current image',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'categoryIds' => 'Categories',
@@ -125,6 +129,12 @@ class Recipe extends \yii\db\ActiveRecord
         }
 
         if ($this->imageFile instanceof UploadedFile) {
+            if ($this->image) {
+                $oldPath = Yii::getAlias('@webroot/' . $this->image);
+                if (is_file($oldPath)) {
+                    @unlink($oldPath);
+                }
+            }
             $filename = uniqid('recipe_') . '.' . $this->imageFile->extension;
             $uploadDir = Yii::getAlias('@webroot/uploads');
             FileHelper::createDirectory($uploadDir);
@@ -132,6 +142,12 @@ class Recipe extends \yii\db\ActiveRecord
             if ($this->imageFile->saveAs($path)) {
                 $this->image = 'uploads/' . $filename;
             }
+        } elseif ($this->removeImage && $this->image) {
+            $oldPath = Yii::getAlias('@webroot/' . $this->image);
+            if (is_file($oldPath)) {
+                @unlink($oldPath);
+            }
+            $this->image = null;
         }
 
         return true;
