@@ -1,53 +1,61 @@
 <?php
-
 use yii\helpers\Html;
-use yii\widgets\DetailView;
-use yii\helpers\ArrayHelper;
-
-/** @var yii\web\View $this */
-/** @var app\models\Recipe $model */
+use yii\helpers\Url;
 
 $this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Recipes', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label'=>'Receitas','url'=>['index']];
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
 ?>
-<div class="recipe-view">
+<div class="recipe-view container py-4">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <!-- Título -->
+    <h2 class="mb-3"><?= Html::encode($model->title) ?></h2>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
+    <!-- Autor -->
+    <p class="text-muted small mb-2">
+        Por <?= Html::encode($model->user->username ?? '—') ?>
     </p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'user_id',
-            'title',
-            'slug',
-            'description:ntext',
-            'cook_time',
-            [
-                'label' => 'Category',
-                'value' => implode(', ', ArrayHelper::getColumn($model->categories, 'name')),
-            ],
-            [
-                'attribute' => 'image',
-                'format' => 'html',
-                'value' => $model->image ? Html::img('/' . $model->image, ['style' => 'max-width:300px;']) : null,
-            ],
-            'created_at',
-            'updated_at',
-        ],
-    ]) ?>
+    <!-- Categorias -->
+    <p class="mb-4">
+        <?php if ($model->categories): ?>
+            <?php foreach ($model->categories as $cat): ?>
+                <span class="badge bg-secondary"><?= Html::encode($cat->name) ?></span>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <span class="badge bg-secondary">Sem categoria</span>
+        <?php endif; ?>
+    </p>
+
+    <!-- Imagem -->
+    <?php if ($model->image): ?>
+        <div class="mb-4">
+            <img src="<?= Url::to('@web/'.$model->image, true) ?>"
+                 class="img-fluid rounded"
+                 style="max-width:80%; max-height:350px; object-fit:cover;"
+                 alt="<?= Html::encode($model->title) ?>">
+        </div>
+    <?php else: ?>
+        <div class="d-flex align-items-center justify-content-center bg-secondary text-white mb-4"
+             style="height:350px; max-width:50%;">
+            <strong>Sem imagem</strong>
+        </div>
+    <?php endif; ?>
+
+    <!-- Modo de preparo -->
+    <div class="d-flex align-items-center mb-2" style="gap:1rem">
+        <h5 class="mb-0">Modo de preparo</h5>
+        <span class="text-muted small">
+            Tempo estimado: <?= $model->cook_time ? Html::encode($model->cook_time).' minutos' : '—' ?>
+        </span>
+    </div>
+
+    <!-- Descrição -->
+    <p class="pre-line"><?= Html::encode($model->description) ?></p>
+
+    <!-- Botão Voltar -->
+    <p class="mt-4">
+        <?= Html::a('← Voltar à lista', ['site/index'], ['class'=>'btn btn-outline-secondary']) ?>
+    </p>
 
 </div>
