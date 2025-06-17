@@ -6,6 +6,7 @@ use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
+use app\models\Favorite;
 use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
 
@@ -119,6 +120,19 @@ class Recipe extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    public function getFavorites()
+    {
+        return $this->hasMany(Favorite::class, ['recipe_id' => 'id']);
+    }
+
+    public function isFavoritedBy($userId)
+    {
+        return Favorite::find()->where([
+            'recipe_id' => $this->id,
+            'user_id' => $userId,
+        ])->exists();
     }
 
 

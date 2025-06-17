@@ -27,17 +27,45 @@ $this->title = 'Receitas';
 
                     <div class="card-body d-flex flex-column">
 
-                        <!-- TÍTULO e CATEGORIA -->
-                        <div class="d-flex align-items-start justify-content-between mb-1">
-                            <h5 class="card-title mb-0">
-                                <?= Html::encode($recipe->title) ?>
-                            </h5>
+                        <!-- TÍTULO, FAVORITO e CATEGORIA -->
+                        <div class="d-flex align-items-center justify-content-between mb-1">
+                            <div class="d-flex align-items-center">
+                                <h5 class="card-title mb-0">
+                                    <?= Html::encode($recipe->title) ?>
+                                </h5>
+                                <?php if (!Yii::$app->user->isGuest): ?>
+                                    <?php $user = Yii::$app->user->identity; ?>
+                                    <?php if ($user->isFavorited($recipe->id)): ?>
+                                        <?= Html::a(
+                                            '★',
+                                            ['favorite/toggle', 'id' => $recipe->id],
+                                            [
+                                                'class' => 'btn btn-sm btn-warning ms-2',
+                                                'title' => 'Remover dos favoritos'
+                                            ]
+                                        ) ?>
+                                    <?php else: ?>
+                                        <?= Html::a(
+                                            '☆',
+                                            ['favorite/toggle', 'id' => $recipe->id],
+                                            [
+                                                'class' => 'btn btn-sm btn-outline-warning ms-2',
+                                                'title' => 'Adicionar aos favoritos'
+                                            ]
+                                        ) ?>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            </div>
+
+                            <!-- badge de categoria -->
                             <?php
                                 $badge = $recipe->categories
                                     ? Html::tag('span', Html::encode($recipe->categories[0]->name), ['class'=>'badge bg-secondary'])
                                     : Html::tag('span', 'Sem categoria', ['class'=>'badge bg-secondary']);
                             ?>
-                            <div class="ms-2"><?= $badge ?></div>
+                            <div>
+                                <?= $badge ?>
+                            </div>
                         </div>
 
                         <!-- AUTOR e TEMPO -->

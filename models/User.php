@@ -74,4 +74,21 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->auth_key === $authKey;
     }
+
+    public function getFavorites()
+    {
+        return $this->hasMany(Favorite::class, ['user_id'=>'id']);
+    }
+    public function getFavoriteRecipes()
+    {
+        return $this->hasMany(Recipe::class, ['id'=>'recipe_id'])
+                    ->via('favorites');
+    }
+
+    public function isFavorited($recipeId): bool
+    {
+        return Favorite::find()
+            ->where(['user_id'=>$this->id,'recipe_id'=>$recipeId])
+            ->exists();
+    }
 }
