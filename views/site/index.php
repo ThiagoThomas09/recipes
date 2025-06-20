@@ -6,7 +6,10 @@ $this->title = 'Receitas';
 ?>
 <div class="site-index">
 
-    <h1 class="my-4"><?= Html::encode($this->title) ?></h1>
+    <div class="d-flex align-items-center my-4" style="gap: 5px;">
+        <h1 class="my-0"><?= Html::encode($this->title) ?></h1>
+        <?= Html::a('Criar nova receita', ['recipe/create'], ['class'=>'btn btn-success']) ?>
+    </div>
 
     <div class="row g-4">
         <?php foreach ($recipes as $recipe): ?>

@@ -77,16 +77,16 @@ class Recipe extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
-            'title' => 'Title',
+            'title' => 'Titulo',
             'slug' => 'Slug',
-            'description' => 'Description',
-            'cook_time' => 'Cook Time',
-            'image' => 'Image',
-            'imageFile' => 'Image',
-            'removeImage' => 'Remove current image',
+            'description' => 'Descrição',
+            'cook_time' => 'Tempo de preparo (minutos)',
+            'image' => 'Imagem',
+            'imageFile' => 'Imagem',
+            'removeImage' => 'Remover imagem',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'categoryIds' => 'Categories',
+            'categoryIds' => 'Categorias',
         ];
     }
 
