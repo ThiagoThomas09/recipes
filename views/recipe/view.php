@@ -3,7 +3,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label'=>'Receitas','url'=>['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="recipe-view container py-4">

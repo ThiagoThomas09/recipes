@@ -34,21 +34,15 @@ class RecipeController extends Controller
         );
     }
 
-    /**
-     * Lists all Recipe models.
-     *
-     * @return string
-     */
     public function actionIndex()
-    {
-        $searchModel = new RecipeSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+    {   
+    $recipes = Recipe::find()->with(['user', 'categories'])->all();
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+    return $this->render('cards', [
+        'recipes' => $recipes,
+    ]);
     }
+
 
     /**
      * Displays a single Recipe model.
