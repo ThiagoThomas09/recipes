@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
     <!-- Descrição -->
-    <p class="pre-line"><?= Html::encode($model->description) ?></p>
+    <p class="pre-line" style="white-space: pre-line"><?= Html::encode($model->description) ?></p>
 
     <!-- Botão Voltar -->
     <p class="mt-4">
